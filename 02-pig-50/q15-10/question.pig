@@ -27,3 +27,8 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+data = FOREACH u GENERATE firstname, color;
+filter_data = FILTER data BY ($0 matches '.*Z.*') AND ($1 matches 'blue');
+DUMP filter_data;
+STORE filter_data INTO 'output';
+fs -get output/ .

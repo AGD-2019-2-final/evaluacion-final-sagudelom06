@@ -26,5 +26,18 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
-
+WITH cte_map as (
+	SELECT c2, k as value
+	FROM t0
+	LATERAL VIEW explode(c3) e1 as k,v
+), cte_arr as (
+	SELECT ch, value
+	FROM cte_map
+	LATERAL VIEW explode(c2) e2 as ch
+) 
+INSERT OVERWRITE LOCAL DIRECTORY '../q12-10/output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT ch, value, count(*)
+FROM cte_arr
+GROUP BY ch, value;
 

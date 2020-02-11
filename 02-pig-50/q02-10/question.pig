@@ -7,6 +7,20 @@
 fs -rm -f -r output;
 -- 
 --  >>> Escriba el codigo del mapper a partir de este punto <<<
--- 
+
+fs -rm -f -r data.tsv
+fs -put data.tsv
+
+
+u = LOAD 'data.tsv' USING PigStorage('\t') 
+    AS (clave:CHARARRAY, 
+        Fecha:CHARARRAY, 
+        numero:INT); 
+
+
+orden = ORDER u BY clave,numero ASC;
+DUMP orden;
+STORE orden INTO 'output';
+fs -get output/ .
 
 

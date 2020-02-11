@@ -32,4 +32,18 @@ u = LOAD 'data.csv' USING PigStorage(',')
         quantity:INT);
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
---
+
+u = LOAD 'data.csv' USING PigStorage(',') 
+    AS (clave:INT,
+    	nombre:CHARARRAY,
+    	apell:CHARARRAY,
+    	birth:CHARARRAY,
+    	color:CHARARRAY,
+    	numero:INT);
+
+data = FOREACH u GENERATE (apell);
+filter_data = FILTER data BY ($0 matches '.*D.*') OR ($0 matches '.*E.*') OR ($0 matches '.*F.*') OR ($0 matches '.*G.*') OR ($0 matches '.*H.*') OR ($0 matches '.*I.*') OR ($0 matches '.*J.*') OR ($0 matches '.*K.*');
+
+DUMP filter_data;
+STORE filter_data INTO 'output';
+fs -get output/ .

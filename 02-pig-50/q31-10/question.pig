@@ -20,3 +20,11 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+date = FOREACH u GENERATE birthday, ToDate(birthday);
+anos = FOREACH date GENERATE GetYear($1);
+grup = GROUP anos BY $0;
+conteo = FOREACH grup GENERATE FLATTEN(group), COUNT($1);
+
+DUMP conteo;
+STORE conteo INTO 'output' USING PigStorage(',');
+fs -get output/ .

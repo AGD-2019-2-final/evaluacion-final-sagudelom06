@@ -27,3 +27,10 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+name = FOREACH u GENERATE firstname;
+cut = FOREACH name GENERATE $0, SUBSTRING($0, 0, 1);
+filtro = FILTER cut BY $1 >= 'M';
+resultado = FOREACH filtro GENERATE $0;
+DUMP resultado;
+STORE resultado INTO 'output';
+fs -get output/ .

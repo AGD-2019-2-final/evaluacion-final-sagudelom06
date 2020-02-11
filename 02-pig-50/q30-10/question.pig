@@ -40,4 +40,9 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+date = FOREACH u GENERATE birthday, ToDate(birthday);
 
+format = FOREACH date GENERATE $0, SUBSTRING($0, 8, 10), GetDay($1), GetDay($1), GetDay($1);
+DUMP format;
+--STORE format INTO 'output' USING PigStorage(',');
+--fs -get output/ .

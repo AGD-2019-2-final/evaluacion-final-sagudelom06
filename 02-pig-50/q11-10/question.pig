@@ -38,3 +38,24 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+u = LOAD 'data.csv' USING PigStorage(',') 
+    AS (clave:INT,
+    	nombre:CHARARRAY,
+    	apell:CHARARRAY,
+    	birth:CHARARRAY,
+    	color:CHARARRAY,
+    	numero:INT);
+
+
+data = FOREACH u GENERATE apell;
+s = ORDER data BY $0;
+
+tabla = FOREACH s GENERATE CONCAT ( $0,',',UPPER($0),',',LOWER($0));
+
+DUMP tabla;
+STORE tabla INTO 'output';
+fs -get output/ .
+
+
+
+

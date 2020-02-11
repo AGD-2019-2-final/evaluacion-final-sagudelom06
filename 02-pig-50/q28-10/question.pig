@@ -29,4 +29,10 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+date = FOREACH u GENERATE SUBSTRING(birthday,0,4), SUBSTRING(birthday,2,4);
+--s = LIMIT date 5;
+DUMP date;
+STORE date INTO 'output' USING PigStorage(',');
+fs -get output/ .
+
 

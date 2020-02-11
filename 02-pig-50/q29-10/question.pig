@@ -40,3 +40,9 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+
+fecha = FOREACH u GENERATE birthday, ToDate(birthday);
+format = FOREACH fecha GENERATE $0, LOWER(ToString($1, 'MMM')), ToString($1, 'MM'), GetMonth($1);
+DUMP format;
+STORE format INTO 'output' USING PigStorage(',');
+fs -get output/ .

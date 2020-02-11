@@ -25,4 +25,8 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
-
+fecha = FOREACH u GENERATE birthday;
+cumple = FOREACH fecha GENERATE SUBSTRING($0, 5, 7);
+DUMP cumple;
+STORE cumple INTO 'output';
+fs -get output/ .

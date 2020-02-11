@@ -26,3 +26,21 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+u = LOAD 'data.csv' USING PigStorage(',') 
+    AS (clave:INT,
+    	nombre:CHARARRAY,
+    	apell:CHARARRAY,
+    	birth:CHARARRAY,
+    	color:CHARARRAY,
+    	numero:INT);
+
+apellidos = FOREACH u GENERATE apell;
+grupo = GROUP apellidos BY $0;
+largo = FOREACH grupo GENERATE $0, SIZE(group);
+orden = ORDER largo BY $1 DESC, $0;
+s = LIMIT orden 5;
+
+DUMP s;
+
+STORE s INTO 'output' USING PigStorage(',');
+fs -get output/ .
